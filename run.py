@@ -20,7 +20,7 @@ async def run(strcode):
         a = re.findall(r'(py|php|java|cpp|js|c#|c|go|asm)\s?(-i)?\s?(\w*)?(\n|\r)((?:.|\n)+)', strcode)[0]
         print(a)
     except:
-        return "输入有误汪\n目前仅支持c/cpp/c#/py/php/go/java/js"
+        return "输入有误\n目前仅支持c/cpp/c#/py/php/go/java/js"
     if "-i" in strcode:
         lang, code = a[0], a[4]
         dataJson = {
@@ -57,6 +57,6 @@ async def run(strcode):
             if len(repr(res.json()['stdout'])) < 100:
                 return res.json()['stdout']
             else:
-                return "返回字符过长呐~~~"
+                return "返回字符过长"
         else:
             return res.json()['stderr'].strip()
