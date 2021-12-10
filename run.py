@@ -15,14 +15,12 @@ codeType = {
 
 
 async def run(strcode):
-    strcode = strcode.replace('&amp;', '&').replace('&#91;', '[').replace('&#93;', ']')
     try:
-        a = re.findall(r'(py|php|java|cpp|js|c#|c|go|asm)\s?(-i)?\s?(\w*)?(\n|\r)((?:.|\n)+)', strcode)[0]
-        print(a)
+        a = re.findall(r'(py|php|java|cpp|js|c#|c|go|asm)', strcode[0])
     except:
         return "输入有误\n目前仅支持c/cpp/c#/py/php/go/java/js"
     if "-i" in strcode:
-        lang, code = a[0], a[4]
+        lang, code = a[0], strcode[3]
         dataJson = {
             "files": [
                 {
@@ -30,9 +28,36 @@ async def run(strcode):
                     "content": code
                 }
             ],
-            "stdin": a[2],
+            "stdin": strcode[2],
             "command": ""
         }
+    else:
+        lang, code = a[0], strcode[1]
+        dataJson = {
+            "files": [
+                {
+                    "name": f"main.{codeType[lang][1]}",
+                    "content": code
+                }
+            ],
+            "stdin": "",
+            "command": ""
+        }
+    headers = {
+        "Authorization": "Token 0123456-789a-bcde-f012-3456789abcde",
+        "content-type": "application/"
+    }
+
+    res = requests.post(url=f'https://glot.io/run/{codeType[lang][0]}?version=latest', headers=headers, json=dataJson)
+    if res.status_code == 200:
+        if res.json()['stdout'] != "":
+            if len(repr(res.json()['stdout'])) < 100:
+                return res.json()['stdout']
+            else:
+                return "返回字符过长"
+        else:
+            return res.json()['stderr'].strip()
+
     else:
         lang, code = a[0], a[4]
         dataJson = {
