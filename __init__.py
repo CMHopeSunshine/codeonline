@@ -1,4 +1,6 @@
 import hoshino
+from . import *
+from .run import *
 
 HELP_MSG = '''
 1.[#code [语言] (-i) (输入)] :在线运行代码
