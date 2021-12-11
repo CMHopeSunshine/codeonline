@@ -3,7 +3,7 @@ from . import *
 from .run import *
 
 HELP_MSG = '''
-1.[#code#[语言]#(-i)#(输入)#代码] :在线运行代码
+1.[#code [语言] (-i) (输入) 代码] :在线运行代码
 '''
 sv = hoshino.Service('code', bundle='详细', help_=HELP_MSG)
 
