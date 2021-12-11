@@ -9,6 +9,7 @@ sv = hoshino.Service('code', bundle='详细', help_=HELP_MSG)
 
 @sv.on_prefix('#code')
 async def code(bot, ev):
-  code = ev.message.extract_plain_text().split('#',2)
+  code = ev.message.extract_plain_text().split(' ',1)
   res = await run(code)
+  res = '代码运行结果：\n' + res
   await bot.send(ev, res, at_sender=True)
