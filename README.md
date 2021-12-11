@@ -5,8 +5,8 @@
 移植自nonebot2插件 [https://github.com/yzyyz1387/nonebot_plugin_code/](https://github.com/yzyyz1387/nonebot_plugin_code/)
 
 ## 安装
-到'/hoshino/modules'目录下'git clone https://github.com/CMHopeSunshine/codeonline'
-并在'/hoshino/config/__bot__.py'的'MODULES_ON'处添加'codeonline'开启模块
+到`/hoshino/modules`目录下`git clone https://github.com/CMHopeSunshine/codeonline`
+并在`/hoshino/config/__bot__.py`的`MODULES_ON`处添加`codeonline`开启模块
 
 ## 指令
 ```
@@ -38,4 +38,4 @@
         输出结果为(例)：roll3个50到100以内的数:86 54 54 
         
 ```
-支持语言:'py|php|java|cpp|js|c#|c|go|asm'
+支持语言:`py|php|java|cpp|js|c#|c|go|asm`
