@@ -14,30 +14,24 @@
 []为必须，()为可选
 -i：可选 输入 后跟输入内容
 
-运行代码示例(python)(无输入)：
-    #code#py#
-        print("hello world")
-        
-        输出结果为：hello world
+运行代码示例(c)(无输入)：
+    #code#c#
+    printf("hello world")
+    
 运行代码示例(python)(有输入)：
     #code#py#-i#你好#
-        print(input())
-        
-        输出结果为：你好
+    print(input())
         
 运行代码示例(python)(生成随机数)：
     #code#py#-i#50,100,3#
-        import random
-        list=str(input()).split(',')
-        p='roll%s个%s到%s以内的数:' % (list[2],list[0],list[1])
-        for i in range(0,int(list[2])):
-            n=random.randint(int(list[0]),int(list[1]))
-            p+=str(n)+' '
-        print(p)
-        
-        输出结果为(例)：roll3个50到100以内的数:86 54 54 
-        
+    import random
+    list=str(input()).split(',')
+    p='roll%s个%s到%s以内的数:' % (list[2],list[0],list[1])
+    for i in range(0,int(list[2])):
+        n=random.randint(int(list[0]),int(list[1]))
+        p+=str(n)+' '
+    print(p)
 ```
 支持语言:`py|php|java|cpp|js|c#|c|go|asm`
-## 示范截图
+## 示例截图
 ![imgae](https://github.com/CMHopeSunshine/codeonline/blob/main/example.png)
