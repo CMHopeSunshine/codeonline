@@ -19,8 +19,9 @@ async def run(strcode):
         a = re.findall(r'(py|php|java|cpp|js|c#|c|go|asm)', strcode[1])
     except:
         return "输入有误\n目前仅支持c/cpp/c#/py/php/go/java/js"
-    if "-i" in strcode:
-        lang, code = a[0], strcode[4]
+    if strcode[2].startswith("-i"):
+        b=strcode[2].split('#',2)
+        lang, code = a[0], b[2]
         dataJson = {
             "files": [
                 {
@@ -28,7 +29,7 @@ async def run(strcode):
                     "content": code
                 }
             ],
-            "stdin": strcode[3],
+            "stdin": b[1],
             "command": ""
         }
     else:
