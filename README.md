@@ -1,14 +1,12 @@
 <div align="center">
-# 在线运行代码
-
-HoshinoBot在线运行代码插件
+    <h1>HoshinoBot在线运行代码插件</h1>
 </div>
 
 移植自nonebot2插件 [https://github.com/yzyyz1387/nonebot_plugin_code/](https://github.com/yzyyz1387/nonebot_plugin_code/)
 
-##安装
-到/hoshino/modules目录下git clone https://github.com/CMHopeSunshine/codeonline
-并在/hoshino/config/__bot__.py的MODULES_ON处添加codeonline开启模块
+## 安装
+到'/hoshino/modules'目录下'git clone https://github.com/CMHopeSunshine/codeonline'
+并在'/hoshino/config/__bot__.py'的'MODULES_ON'处添加'codeonline'开启模块
 
 ## 指令
 ```
@@ -40,3 +38,4 @@ HoshinoBot在线运行代码插件
         输出结果为(例)：roll3个50到100以内的数:86 54 54 
         
 ```
+支持语言:'py|php|java|cpp|js|c#|c|go|asm'
