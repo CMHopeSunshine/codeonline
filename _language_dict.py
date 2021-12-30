@@ -45,7 +45,7 @@ language_list: Dict[str, List[str]] = {
     'typescript': ['typescript', 'ts']
 }
 
-# {语言名: 后缀名}
+# {语言名: 文件后缀名}
 suffix_list: Dict[str, str] = {
     'assembly': "asm",
     'ats': "dats",
@@ -87,6 +87,7 @@ suffix_list: Dict[str, str] = {
 }
 
 # 查询列表, 应该有更好的实现方式, 但是语言比较少, 就先这样了
+# 变成{"py": "python", "python3": "python", "python":"python", ...}的结构
 search_dict = {}
 for key, value in language_list.items():
     for alias in value:
