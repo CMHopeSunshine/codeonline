@@ -9,9 +9,9 @@ async def run(command: str) -> str:
     # "py -i 50,100,3 import random" -> {'language_type': 'py', 'stdin': '50,100,3', 'code': 'import random'}
     match_obj = re.match(r"^(?P<language_type>[^ \n]+) ?(-i *(?P<stdin>[^ \n]+))?[\n ]+(?P<code>[\w\W]+)", command)
     code_type = match_obj.group("language_type").strip()
-    if code_type not in search_dict:  # 如果发送的代码不在查询字典里面
+    if code_type not in search_dict:  # 如果发送的语言类型不在查询字典里面
         return f"输入有误, www找不到{code_type}, 请检查您的输入"
-    code = match_obj.group("code").strip()  # 获取code
+    code = match_obj.group("code").strip()  # 获取code的字段
     if len(code) == 0:  # 如果code为空
         return "运行代码不能为空~"
     stdin = match_obj.group("stdin")  # 获取stdin的输入
