@@ -1,61 +1,60 @@
 import re
-import requests
+import aiohttp
+from ._language_dict import search_dict, suffix_list
 
-codeType = {
-    'py': ['python', 'py'],
-    'cpp': ['cpp', 'cpp'],
-    'java': ['java', 'java'],
-    'php': ['php', 'php'],
-    'js': ['javascript', 'js'],
-    'c': ['c', 'c'],
-    'c#': ['csharp', 'cs'],
-    'go': ['go', 'go'],
-    'asm': ['assembly', 'asm']
-}
+GLOT_TOKEN = "填写自己的token或者移到config里面"
 
 
-async def run(strcode):
-    try:
-        a = re.findall(r'(py|php|java|cpp|js|c#|c|go|asm)', strcode[0])
-    except:
-        return "输入有误\n目前仅支持c/cpp/c#/py/php/go/java/js"
-    if strcode[1][0:2] == "-i":
-        strcode=strcode[1].split(' ',2)
-        lang, code = a[0], strcode[2]
-        dataJson = {
-            "files": [
-                {
-                    "name": f"main.{codeType[lang][1]}",
-                    "content": code
-                }
-            ],
-            "stdin": strcode[1],
-            "command": ""
-        }
-    else:
-        lang, code = a[0], strcode[1]
-        dataJson = {
-            "files": [
-                {
-                    "name": f"main.{codeType[lang][1]}",
-                    "content": code
-                }
-            ],
-            "stdin": "",
-            "command": ""
-        }
-    headers = {
-        "Authorization": "Token 0123456-789a-bcde-f012-3456789abcde",
-        "content-type": "application/"
+async def run(command: str) -> str:
+    # "py -i 50,100,3 import random" -> {'language_type': 'py', 'stdin': '50,100,3', 'code': 'import random'}
+    match_obj = re.match(r"^(?P<language_type>[^ \n]+) ?(-i *(?P<stdin>[^ \n]+))?[\n ]+(?P<code>[\w\W]+)", command)
+    code_type = match_obj.group("language_type").strip()
+    if code_type not in search_dict:
+        return f"输入有误, www找不到{code_type}, 请检查您的输入"
+    code = match_obj.group("code").strip()
+    if len(code) == 0:
+        return "运行代码不能为空~"
+    stdin = match_obj.group("stdin")
+    type_name = search_dict[code_type]
+    header = {
+        "Authorization": f"Token {GLOT_TOKEN}",
+        "Content-type": "application/json"
     }
+    data = {
+        "files": [
+            {
+                'name': f'main.{suffix_list[type_name]}',
+                'content': code
+            }
+        ],
+        "stdin": stdin if stdin is not None else "",
+        "command": ""
+    }
+    try:
+        async with aiohttp.TCPConnector(ssl=False) as connector:
+            async with aiohttp.request("POST", headers=header,
+                                       json=data,
+                                       url=f"https://glot.io/api/run/{type_name}/latest",
+                                       connector=connector
+                                       ) as resp:
+                rep_json = await resp.json()
+                if 'message' in rep_json:
+                    return rep_json['message']
 
-    res = requests.post(url=f'https://glot.io/run/{codeType[lang][0]}?version=latest', headers=headers, json=dataJson)
-    if res.status_code == 200:
-        if res.json()['stdout'] != "":
-            if len(repr(res.json()['stdout'])) < 500:
-                return res.json()['stdout']
-            else:
-                return "输出结果过长，仅显示前500：" + res.json()['stdout'][0:500]
-        else:
-            return res.json()['stderr'].strip()
-
+                result = "代码运行结果：\n"
+                stdout = rep_json['stdout'].rstrip()
+                error = rep_json["error"].rstrip()
+                stderr = rep_json["stderr"].rstrip()
+                if stdout:
+                    result += f"{stdout}\n"
+                if stderr:
+                    result += f"{stderr}\n"
+                if error:
+                    result += f"{stdout}\n"
+                if len(result) > 500 or result.count("\n") > 15:
+                    return f"输出结果过长，仅显示前500：\n{result[0:500]}"
+                return result
+    except Exception as e:
+        from . import sv
+        sv.logger.error(f"{e} occurred when request l: {code_type} c:{code}")
+        return f"请求失败...请联系维护者"
