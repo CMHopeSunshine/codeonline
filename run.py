@@ -50,7 +50,7 @@ async def run(command: str) -> str:
                 if stderr:
                     result += f"{stderr}\n"
                 if error:
-                    result += f"{stdout}\n"
+                    result += f"{error}\n"
                 if len(result) > 500 or result.count("\n") > 15:
                     return f"输出结果过长，仅显示前500：\n{result[0:500]}"
                 return result
