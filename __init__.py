@@ -1,4 +1,5 @@
 import hoshino
+from hoshino import util
 from hoshino.typing import CQEvent
 from . import *
 from .run import *
@@ -12,4 +13,4 @@ sv = hoshino.Service('code', bundle='详细', help_=HELP_MSG, enable_on_default=
 @sv.on_prefix('#code')
 async def code(bot, ev: CQEvent):
     res = await run(ev.message.extract_plain_text())
-    await bot.send(ev, res, at_sender=True)
+    await bot.send(ev, util.filt_message(res), at_sender=True)
